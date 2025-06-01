@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Creator - Dark Mode</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            bg: '#0f172a',
+                            card: '#1e293b',
+                            border: '#334155',
+                            text: '#f1f5f9'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-white mb-2">JSON Creator</h1>
+            <p class="text-slate-400">Create and manage JSON data easily</p>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-8">
+            <!-- Input Form -->
+            <div class="bg-slate-800 rounded-lg p-6 shadow-xl border border-slate-700">
+                <h2 class="text-2xl font-semibold mb-6 text-white">Add New Entry</h2>
+                
+                <form id="jsonForm" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-300 mb-2">ID Number</label>
+                        <input type="number" id="idNumber" class="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="1" min="1">
+                        <p class="text-xs text-slate-400 mt-1">Will become: problem[number]</p>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-slate-300 mb-2">Problem Name</label>
+                        <input type="text" id="problemName" class="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g., Two Sum">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-slate-300 mb-2">URL</label>
+                        <input type="url" id="url" class="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="https://leetcode.com/problems/...">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-slate-300 mb-2">Date Posted</label>
+                        <input type="date" id="datePosted" readonly class="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-slate-300 cursor-not-allowed">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-slate-300 mb-2">Posted By</label>
+                        <select id="postedBy" class="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <option value="">Select who posted...</option>
+                            <option value="Ganesh">Ganesh</option>
+                            <option value="Vaishnavi">Vaishnavi</option>
+                        </select>
+                    </div>
+                    
+                    <div class="flex space-x-3">
+                        <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            Add Entry
+                        </button>
+                        <button type="button" id="clearForm" class="bg-slate-600 hover:bg-slate-700 text-white font-medium py-2 px-4 rounded-md transition duration-200 focus:outline-none focus:ring-2 focus:ring-slate-500">
+                            Clear
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- JSON Output -->
+            <div class="bg-slate-800 rounded-lg p-6 shadow-xl border border-slate-700">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-semibold text-white">JSON Output</h2>
+                    <div class="flex space-x-2">
+                        <button id="copyJson" class="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-md transition duration-200 focus:outline-none focus:ring-2 focus:ring-green-500">
+                            Copy JSON
+                        </button>
+                        <button id="clearJson" class="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-md transition duration-200 focus:outline-none focus:ring-2 focus:ring-red-500">
+                            Clear All
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="bg-slate-900 rounded-md p-4 border border-slate-600 min-h-96">
+                    <pre id="jsonOutput" class="text-sm text-slate-300 whitespace-pre-wrap overflow-auto max-h-96">[]</pre>
+                </div>
+                
+                <div class="mt-4 text-sm text-slate-400">
+                    <span id="entryCount">0</span> entries total
+                </div>
+            </div>
+        </div>
+
+        <!-- Current Entries List -->
+        <div class="mt-8 bg-slate-800 rounded-lg p-6 shadow-xl border border-slate-700">
+            <h2 class="text-2xl font-semibold mb-4 text-white">Current Entries</h2>
+            <div id="entriesList" class="space-y-2">
+                <p class="text-slate-400 italic">No entries yet. Add some entries using the form above.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed top-4 right-4 bg-green-600 text-white px-6 py-3 rounded-md shadow-lg transform translate-x-full transition-transform duration-300 z-50">
+        <span id="toastMessage">JSON copied to clipboard!</span>
+    </div>
+
+    <script>
+        let jsonData = [];
+        let entryCounter = 1;
+
+        const form = document.getElementById('jsonForm');
+        const jsonOutput = document.getElementById('jsonOutput');
+        const entryCount = document.getElementById('entryCount');
+        const entriesList = document.getElementById('entriesList');
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toastMessage');
+
+        function updateDisplay() {
+            jsonOutput.textContent = JSON.stringify(jsonData, null, 2);
+            entryCount.textContent = jsonData.length;
+            updateEntriesList();
+        }
+
+        function updateEntriesList() {
+            if (jsonData.length === 0) {
+                entriesList.innerHTML = '<p class="text-slate-400 italic">No entries yet. Add some entries using the form above.</p>';
+                return;
+            }
+
+            entriesList.innerHTML = jsonData.map((entry, index) => `
+                <div class="flex justify-between items-center bg-slate-700 p-3 rounded-md border border-slate-600">
+                    <div>
+                        <span class="font-medium text-white">${entry.problemName}</span>
+                        <span class="text-slate-400 ml-2">(${entry.id})</span>
+                        <span class="text-slate-400 ml-2">by ${entry.postedBy}</span>
+                    </div>
+                    <button onclick="removeEntry(${index})" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm transition duration-200">
+                        Remove
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function removeEntry(index) {
+            jsonData.splice(index, 1);
+            updateDisplay();
+            showToast('Entry removed!', 'bg-orange-600');
+        }
+
+        function showToast(message, bgColor = 'bg-green-600') {
+            toastMessage.textContent = message;
+            toast.className = `fixed top-4 right-4 ${bgColor} text-white px-6 py-3 rounded-md shadow-lg transform transition-transform duration-300 z-50`;
+            toast.style.transform = 'translateX(0)';
+            setTimeout(() => {
+                toast.style.transform = 'translateX(100%)';
+            }, 3000);
+        }
+
+        function setISTDate() {
+            // Set IST date
+            const now = new Date();
+            const istOffset = 5.5 * 60 * 60 * 1000; // IST is UTC+5:30
+            const istDate = new Date(now.getTime() + istOffset);
+            document.getElementById('datePosted').value = istDate.toISOString().split('T')[0];
+        }
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const idNumber = document.getElementById('idNumber').value;
+            const entry = {
+                id: `problem${idNumber}`,
+                problemName: document.getElementById('problemName').value,
+                url: document.getElementById('url').value,
+                datePosted: document.getElementById('datePosted').value,
+                postedBy: document.getElementById('postedBy').value
+            };
+
+            if (!idNumber || !entry.problemName || !entry.url || !entry.postedBy) {
+                showToast('Please fill in all required fields!', 'bg-red-600');
+                return;
+            }
+
+            jsonData.push(entry);
+            updateDisplay();
+            
+            // Reset the form fields
+            document.getElementById('idNumber').value = '';
+            document.getElementById('problemName').value = '';
+            document.getElementById('url').value = '';
+            document.getElementById('postedBy').value = '';
+            
+            showToast('Entry added successfully!');
+        });
+
+        document.getElementById('clearForm').addEventListener('click', () => {
+            document.getElementById('idNumber').value = '';
+            document.getElementById('problemName').value = '';
+            document.getElementById('url').value = '';
+            document.getElementById('postedBy').value = '';
+        });
+
+        document.getElementById('copyJson').addEventListener('click', async () => {
+            try {
+                await navigator.clipboard.writeText(JSON.stringify(jsonData, null, 2));
+                showToast('JSON copied to clipboard!');
+            } catch (err) {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = JSON.stringify(jsonData, null, 2);
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showToast('JSON copied to clipboard!');
+            }
+        });
+
+        document.getElementById('clearJson').addEventListener('click', () => {
+            if (confirm('Are you sure you want to clear all entries?')) {
+                jsonData = [];
+                updateDisplay();
+                showToast('All entries cleared!', 'bg-orange-600');
+            }
+        });
+
+        // Initialize display and set IST date
+        updateDisplay();
+        setISTDate();
+    </script>
+</body>
+</html>
