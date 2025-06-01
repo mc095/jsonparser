@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSA Platform Self-Hosting Manual</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            color: #333;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        h1 {
+            border-bottom: 2px solid #eee;
+            padding-bottom: 1rem;
+        }
+        h2 {
+            margin-top: 2rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.5rem;
+        }
+        code {
+            background: #f5f5f5;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        pre {
+            background: #f5f5f5;
+            padding: 1rem;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .note {
+            background: #e3f2fd;
+            padding: 1rem;
+            border-left: 4px solid #2196f3;
+            margin: 1rem 0;
+        }
+        .warning {
+            background: #fff3e0;
+            padding: 1rem;
+            border-left: 4px solid #ff9800;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>DSA Platform Self-Hosting Manual</h1>
+    
+    <h2>Table of Contents</h2>
+    <ol>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#installation">Installation</a></li>
+        <li><a href="#firebase-setup">Firebase Setup</a></li>
+        <li><a href="#admin-configuration">Admin Configuration</a></li>
+        <li><a href="#security-rules">Security Rules</a></li>
+        <li><a href="#deployment">Deployment</a></li>
+        <li><a href="#maintenance">Maintenance</a></li>
+    </ol>
+
+    <h2 id="prerequisites">1. Prerequisites</h2>
+    <p>Before you begin the self-hosting process, ensure you have the following installed:</p>
+    <ul>
+        <li>Node.js (v18 or higher)</li>
+        <li>npm (v9 or higher)</li>
+        <li>Git</li>
+        <li>A Firebase account</li>
+        <li>A code editor (VS Code recommended)</li>
+    </ul>
+
+    <h2 id="installation">2. Installation</h2>
+    <p>Follow these steps to set up the development environment:</p>
+    <ol>
+        <li>Clone the repository:
+            <pre><code>git clone [your-repository-url]
+cd [repository-name]</code></pre>
+        </li>
+        <li>Install dependencies:
+            <pre><code>npm install</code></pre>
+        </li>
+        <li>Create a `.env.local` file in the root directory with the following variables:
+            <pre><code>NEXT_PUBLIC_FIREBASE_API_KEY=your_api_key
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_auth_domain
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_storage_bucket
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id
+NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id</code></pre>
+        </li>
+    </ol>
+
+    <h2 id="firebase-setup">3. Firebase Setup</h2>
+    <p>To set up Firebase for your self-hosted instance:</p>
+    <ol>
+        <li>Go to the Firebase Console (https://console.firebase.google.com)</li>
+        <li>Create a new project</li>
+        <li>Enable Authentication:
+            <ul>
+                <li>Go to Authentication > Sign-in method</li>
+                <li>Enable Email/Password authentication</li>
+            </ul>
+        </li>
+        <li>Set up Firestore Database:
+            <ul>
+                <li>Create a new database in production mode</li>
+                <li>Choose a location closest to your target users</li>
+            </ul>
+        </li>
+        <li>Configure Firebase Security Rules (see Security Rules section)</li>
+    </ol>
+
+    <h2 id="admin-configuration">4. Admin Configuration</h2>
+    <p>The platform uses a role-based access control system. To set up an admin user:</p>
+    <ol>
+        <li>First, create a regular user account through the platform's registration process</li>
+        <li>Access the Firebase Console</li>
+        <li>Navigate to Firestore Database</li>
+        <li>Find the user document in the `users` collection</li>
+        <li>Update the user's role field to "admin":
+            <pre><code>{
+  "role": "admin",
+  "email": "admin@example.com",
+  "displayName": "Admin User",
+  "createdAt": "timestamp",
+  "joinedAt": "timestamp",
+  "settings": {
+    "theme": "light",
+    "notifications": true
+  }
+}</code></pre>
+        </li>
+    </ol>
+
+    <div class="note">
+        <strong>Note:</strong> The admin user has full access to:
+        <ul>
+            <li>Create, edit, and delete problems</li>
+            <li>Manage user accounts</li>
+            <li>Access all user solutions and statistics</li>
+            <li>Modify platform settings</li>
+        </ul>
+    </div>
+
+    <h2 id="security-rules">5. Security Rules</h2>
+    <p>The platform uses Firebase Security Rules to control access to data. The rules are already configured in the `firestore.rules` file, but you should review and customize them based on your needs:</p>
+    <ul>
+        <li>Users can only read their own data unless they're an admin</li>
+        <li>Only admins can create and modify problems</li>
+        <li>Users can only submit solutions to their own account</li>
+        <li>Daily stats are accessible to all authenticated users</li>
+    </ul>
+
+    <div class="warning">
+        <strong>Important:</strong> Always test your security rules thoroughly before deploying to production. Use the Firebase Emulator Suite for testing.
+    </div>
+
+    <h2 id="deployment">6. Deployment</h2>
+    <p>To deploy the platform:</p>
+    <ol>
+        <li>Build the application:
+            <pre><code>npm run build</code></pre>
+        </li>
+        <li>Deploy to your preferred hosting platform (e.g., Vercel, Firebase Hosting):
+            <ul>
+                <li>For Vercel:
+                    <pre><code>vercel deploy</code></pre>
+                </li>
+                <li>For Firebase Hosting:
+                    <pre><code>firebase deploy</code></pre>
+                </li>
+            </ul>
+        </li>
+    </ol>
+
+    <h2 id="maintenance">7. Maintenance</h2>
+    <p>Regular maintenance tasks include:</p>
+    <ul>
+        <li>Monitoring Firebase usage and costs</li>
+        <li>Regular backups of Firestore data</li>
+        <li>Updating dependencies:
+            <pre><code>npm update</code></pre>
+        </li>
+        <li>Checking for security updates</li>
+        <li>Monitoring application performance</li>
+    </ul>
+
+    <div class="note">
+        <strong>Best Practices:</strong>
+        <ul>
+            <li>Keep your Firebase project credentials secure</li>
+            <li>Regularly review and update security rules</li>
+            <li>Monitor user activity and system logs</li>
+            <li>Maintain regular backups of your database</li>
+            <li>Keep all dependencies up to date</li>
+        </ul>
+    </div>
+
+    <h2>Additional Resources</h2>
+    <ul>
+        <li><a href="https://firebase.google.com/docs">Firebase Documentation</a></li>
+        <li><a href="https://nextjs.org/docs">Next.js Documentation</a></li>
+        <li><a href="https://firebase.google.com/docs/emulator-suite">Firebase Emulator Suite</a></li>
+    </ul>
+
+    <footer style="margin-top: 4rem; padding-top: 2rem; border-top: 1px solid #eee;">
+        <p>This manual was last updated on March 2024. For the latest updates, please check the repository documentation.</p>
+    </footer>
+</body>
+</html> 
