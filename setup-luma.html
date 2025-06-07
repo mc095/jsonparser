@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LUMA Voice Assistant - Documentation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .warning {
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        pre {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        h2 {
+            border-bottom: 2px solid #eaecef;
+            padding-bottom: 0.3em;
+        }
+    </style>
+</head>
+<body>
+    <h1>LUMA Voice Assistant - Technical Documentation</h1>
+
+    <h2>Detailed Setup Guide</h2>
+    
+    <h3>System Requirements</h3>
+    <ul>
+        <li>Operating System: Windows, macOS, or Linux</li>
+        <li>Python 3.8 or higher</li>
+        <li>RAM: 4GB minimum (8GB recommended)</li>
+        <li>Storage: 500MB free space</li>
+        <li>Hardware:
+            <ul>
+                <li>Working microphone (USB or integrated)</li>
+                <li>Speakers or headphones</li>
+                <li>Stable internet connection</li>
+            </ul>
+        </li>
+    </ul>
+
+    <h3>Dependencies Overview</h3>
+    <pre>
+sounddevice           # Audio I/O handling
+numpy                 # Audio processing
+torch                 # Neural network backend
+silero-vad            # Voice activity detection
+moonshine-onnx        # Speech recognition
+groq                  # LLM API client
+pyttsx3               # Text-to-speech
+python-dotenv         # Environment management</pre>
+
+    <h3>Step-by-Step Installation</h3>
+    <ol>
+        <li>
+            <strong>Python Installation</strong>
+            <ul>
+                <li>Download Python from <a href="https://python.org">python.org</a></li>
+                <li>During installation, check "Add Python to PATH"</li>
+                <li>Verify installation: <code>python --version</code></li>
+            </ul>
+        </li>
+        <li>
+            <strong>Virtual Environment Setup</strong>
+            <pre>
+# Windows
+python -m venv venv
+venv\Scripts\activate
+
+# Linux/MacOS
+python3 -m venv venv
+source venv/bin/activate</pre>
+        </li>
+        <li>
+            <strong>Dependencies Installation</strong>
+            <pre>pip install -r requirements.txt</pre>
+        </li>
+        <li>
+            <strong>Groq API Setup</strong>
+            <ol>
+                <li>Sign up at <a href="https://console.groq.com/">console.groq.com</a></li>
+                <li>Generate an API key</li>
+                <li>Add the API key in .env</li>
+                <li>Format : <code>GROQ_API_KEY=your_api_key_here</code></li>
+            </ol>
+        </li>
+    </ol>
+
+    <h2>Configuration Details</h2>
+    
+    <h3>Audio Settings</h3>
+    <pre>
+SAMPLING_RATE = 16000    # Audio sampling frequency
+CHUNK_SIZE = 512         # Audio buffer size
+MAX_SPEECH_SECS = 30     # Maximum speech duration
+VAD_THRESHOLD = 0.3      # Voice detection sensitivity
+VAD_MIN_SILENCE = 3000   # Minimum silence duration (ms)</pre>
+
+    <h3>Model Configuration</h3>
+    <ul>
+        <li><strong>Speech Recognition:</strong> Moonshine ASR (base model)</li>
+        <li><strong>LLM:</strong> Groq LLaMA 3.1-8B</li>
+        <li><strong>VAD:</strong> Silero VAD (ONNX)</li>
+    </ul>
+
+    <h2>Troubleshooting Guide</h2>
+
+    <h3>Common Issues</h3>
+    
+    <div class="warning">
+        <strong>Error:</strong> "GROQ_API_KEY not found"<br>
+        <strong>Solution:</strong> 
+        <ul>
+            <li>Check if .env file exists in root directory</li>
+            <li>Verify API key format</li>
+            <li>Restart application after adding key</li>
+        </ul>
+    </div>
+
+    <div class="warning">
+        <strong>Error:</strong> "Audio input status error"<br>
+        <strong>Solution:</strong>
+        <ul>
+            <li>Check microphone connections</li>
+            <li>Verify microphone permissions</li>
+            <li>Try different USB ports</li>
+            <li>Update audio drivers</li>
+        </ul>
+    </div>
+
+    <div class="warning">
+        <strong>Error:</strong> "VAD processing error"<br>
+        <strong>Solution:</strong>
+        <ul>
+            <li>Restart application</li>
+            <li>Check CPU usage</li>
+            <li>Verify PyTorch installation</li>
+            <li>Update CUDA drivers (if using GPU)</li>
+        </ul>
+    </div>
+
+    <h3>Performance Optimization</h3>
+    <ul>
+        <li>Adjust CHUNK_SIZE for better latency</li>
+        <li>Modify VAD_THRESHOLD for different environments</li>
+        <li>Use GPU acceleration if available</li>
+        <li>Close background applications</li>
+    </ul>
+
+    <h2>Development Guidelines</h2>
+    
+    <h3>Code Structure</h3>
+    <pre>
+├── main.py           # Main application entry
+├── terminal_style.py # Terminal UI utilities
+├── requirements.txt  # Dependencies
+└── .env             # Configuration</pre>
+
+    <h3>Contributing</h3>
+    <ol>
+        <li>Fork the repository</li>
+        <li>Create a feature branch</li>
+        <li>Follow PEP-8 style guide</li>
+        <li>Add tests for new features</li>
+        <li>Submit a pull request</li>
+    </ol>
+
+</body>
+</html>
