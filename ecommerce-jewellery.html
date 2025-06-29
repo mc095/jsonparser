@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JewelleryMart Project Structure Guide</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --surface-color: #1e1e1e;
+            --text-color: #e0e0e0;
+            --primary-color: #bb86fc;
+            --secondary-color: #03dac6;
+            --border-color: #333;
+            --code-color: #03dac6;
+            --highlight-color: rgba(187, 134, 252, 0.2);
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            color: var(--secondary-color);
+            margin-top: 40px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+        }
+
+        .file-tree {
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        .file-section {
+            margin-bottom: 30px;
+        }
+
+        .file-path {
+            font-weight: bold;
+            color: var(--code-color);
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .file-description {
+            margin-left: 0;
+            background-color: var(--surface-color);
+            border-left: 3px solid var(--primary-color);
+            padding: 12px;
+            border-radius: 0 5px 5px 0;
+        }
+
+        .note {
+            background-color: rgba(3, 218, 198, 0.1);
+            border-left: 4px solid var(--secondary-color);
+            padding: 12px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+
+        .highlight {
+            background-color: var(--highlight-color);
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <h1>JewelleryMart Project Structure Guide</h1>
+
+    <div class="file-tree">
+jewelleryMart
+├─ .mvn
+│  └─ wrapper
+│     └─ maven-wrapper.properties
+├─ client
+│  ├─ eslint.config.js
+│  ├─ index.html
+│  ├─ package-lock.json
+│  ├─ package.json
+│  ├─ public
+│  │  ├─ frame.png
+│  │  └─ vite.svg
+│  ├─ README.md
+│  ├─ src
+│  │  ├─ App.jsx
+│  │  ├─ assets
+│  │  │  └─ react.svg
+│  │  ├─ components
+│  │  │  └─ AdminLayout.jsx
+│  │  ├─ hooks
+│  │  │  └─ useCheckoutGuard.js
+│  │  ├─ index.css
+│  │  ├─ main.jsx
+│  │  ├─ pages
+│  │  │  ├─ Account.jsx
+│  │  │  ├─ admin
+│  │  │  │  ├─ AdminDashboard.jsx
+│  │  │  │  ├─ CartsAdmin.jsx
+│  │  │  │  ├─ CouponsAdmin.jsx
+│  │  │  │  ├─ Dashboard.jsx
+│  │  │  │  ├─ OrdersAdmin.jsx
+│  │  │  │  ├─ ProductsAdmin.jsx
+│  │  │  │  └─ UsersAdmin.jsx
+│  │  │  ├─ Cart.jsx
+│  │  │  ├─ Category.jsx
+│  │  │  ├─ Checkout.jsx
+│  │  │  ├─ Collections.jsx
+│  │  │  ├─ Contact.jsx
+│  │  │  ├─ Delivery.jsx
+│  │  │  ├─ ForgetPassword.jsx
+│  │  │  ├─ Home.jsx
+│  │  │  ├─ Login.jsx
+│  │  │  ├─ Payment.jsx
+│  │  │  ├─ Product.jsx
+│  │  │  ├─ Signup.jsx
+│  │  │  └─ Success.jsx
+│  │  └─ utils
+│  │     └─ storage.js
+│  ├─ tailwind.config.js
+│  └─ vite.config.js
+├─ mvnw
+├─ mvnw.cmd
+├─ pom.xml
+├─ README.md
+└─ src
+   └─ main
+      ├─ java
+      │  └─ com
+      │     └─ ecommerce
+      │        └─ jewelleryMart
+      │           ├─ config
+      │           │  └─ SecurityConfig.java
+      │           ├─ controller
+      │           │  ├─ AuthController.java
+      │           │  ├─ CartController.java
+      │           │  ├─ CheckoutController.java
+      │           │  ├─ CouponController.java
+      │           │  ├─ OrderController.java
+      │           │  ├─ ProductController.java
+      │           │  └─ UserController.java
+      │           ├─ JewelleryMartApplication.java
+      │           ├─ model
+      │           │  ├─ Cart.java
+      │           │  ├─ Coupon.java
+      │           │  ├─ Order.java
+      │           │  ├─ Product.java
+      │           │  └─ User.java
+      │           └─ repository
+      │              ├─ CartRepository.java
+      │              ├─ CouponRepository.java
+      │              ├─ OrderRepository.java
+      │              ├─ ProductRepository.java
+      │              └─ UserRepository.java
+      └─ resources
+         ├─ application.properties
+         └─ templates
+    </div>
+
+    <div class="file-section">
+        <h2>Project Configuration Files</h2>
+
+        <div class="file-path">pom.xml</div>
+        <div class="file-description">
+            <p>Maven Project Object Model file that defines the project structure, dependencies, and build configuration for the Spring Boot backend. This file specifies all the required libraries, plugins, and build settings needed to compile and package the Java application.</p>
+        </div>
+
+        <div class="file-path">.mvn/wrapper/maven-wrapper.properties</div>
+        <div class="file-description">
+            <p>Configuration file for the Maven Wrapper, which ensures all developers use the same Maven version for consistent builds. This helps avoid version conflicts between different development environments.</p>
+        </div>
+
+        <div class="file-path">mvnw, mvnw.cmd</div>
+        <div class="file-description">
+            <p>Maven wrapper scripts that allow you to run Maven commands without having Maven installed globally on your system. These scripts automatically download the correct Maven version specified in the wrapper properties file.</p>
+        </div>
+
+        <div class="file-path">README.md</div>
+        <div class="file-description">
+            <p>Project documentation file containing essential information about the project, including setup instructions, usage guidelines, and other important notes for developers and users.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h2>Frontend Configuration Files</h2>
+
+        <div class="file-path">client/package.json</div>
+        <div class="file-description">
+            <p>Node.js package configuration file that lists all frontend dependencies and scripts for the React application. This file defines the project name, version, and all required npm packages including React, Vite, Tailwind CSS, and other utilities.</p>
+        </div>
+
+        <div class="file-path">client/package-lock.json</div>
+        <div class="file-description">
+            <p>Automatically generated file that locks the versions of all dependencies to ensure consistent installations across different environments. This file should not be manually edited as it's maintained by npm.</p>
+        </div>
+
+        <div class="file-path">client/index.html</div>
+        <div class="file-description">
+            <p>The main HTML file that serves as the entry point for the React application. This file contains the root DOM element where the React application is mounted and basic HTML structure for the single-page application.</p>
+        </div>
+
+        <div class="file-path">client/vite.config.js</div>
+        <div class="file-description">
+            <p>Configuration file for Vite, the build tool used for the React frontend. This file specifies build options, development server settings, and plugin configurations that optimize the application for development and production.</p>
+        </div>
+
+        <div class="file-path">client/tailwind.config.js</div>
+        <div class="file-description">
+            <p>Configuration file for Tailwind CSS, defining custom styles, themes, and plugins used throughout the application. This file allows for customization of the utility-first CSS framework to match the project's design requirements.</p>
+        </div>
+
+        <div class="file-path">client/eslint.config.js</div>
+        <div class="file-description">
+            <p>Configuration file for ESLint, the JavaScript linter. This file defines coding standards, rules, and plugins that enforce consistent code style and help catch potential errors in the frontend codebase.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h2>Frontend Source Files</h2>
+
+        <div class="file-path">client/src/main.jsx</div>
+        <div class="file-description">
+            <p>The main JavaScript file that initializes the React application. This file typically renders the root component (<span class="highlight">App.jsx</span>) to the DOM element defined in index.html and sets up any global providers or contexts.</p>
+        </div>
+
+        <div class="file-path">client/src/App.jsx</div>
+        <div class="file-description">
+            <p>The root component of the React application that sets up routing and global layout structure. This component typically includes the main navigation, route definitions, and common layout elements that appear across all pages.</p>
+        </div>
+
+        <div class="file-path">client/src/index.css</div>
+        <div class="file-description">
+            <p>Global CSS stylesheet containing styles that apply to the entire application. This file typically includes base styles, global utilities, and any CSS resets or normalizations needed for consistent rendering across browsers.</p>
+        </div>
+
+        <div class="file-path">client/src/assets/react.svg</div>
+        <div class="file-description">
+            <p>React logo SVG file used in the application, typically for branding purposes, loading indicators, or as a visual element in the user interface.</p>
+        </div>
+
+        <div class="file-path">client/public/frame.png</div>
+        <div class="file-description">
+            <p>QR Code Image used in Payment Simulation (png) image</p>
+        </div>
+
+        <div class="file-path">client/public/vite.svg</div>
+        <div class="file-description">
+            <p>Vite logo SVG file used in the application, typically displayed during development or in the application's loading screen.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h2>Frontend Components and Pages</h2>
+
+        <div class="file-path">client/src/components/AdminLayout.jsx</div>
+        <div class="file-description">
+            <p>Layout component specifically designed for admin pages. This component provides a consistent navigation structure, header, and footer for all administrative interfaces, ensuring a uniform experience across different admin sections.</p>
+        </div>
+
+        <div class="file-path">client/src/hooks/useCheckoutGuard.js</div>
+        <div class="file-description">
+            <p>Custom React hook that implements protection for checkout routes. This hook ensures that users cannot access checkout pages without proper authorization or without items in their cart, improving the security and user experience of the checkout process.</p>
+        </div>
+
+        <div class="file-path">client/src/utils/storage.js</div>
+        <div class="file-description">
+            <p>Utility functions for handling local storage operations. This file contains helper functions for saving and retrieving data from the browser's local storage, such as user preferences, authentication tokens, or temporary cart data.</p>
+        </div>
+
+        <div class="file-path">client/src/pages/Home.jsx</div>
+        <div class="file-description">
+            <p>The landing page component that serves as the main entry point for the e-commerce site. This page typically displays featured products, promotions, navigation options, and other key elements to engage visitors and guide them through the shopping experience.</p>
+        </div>
+
+        <div class="file-path">client/src/pages/Product.jsx</div>
+        <div class="file-description">
+            <p>Component that displays detailed information about a single product. This page includes product images, description, specifications, pricing, availability, and add-to-cart functionality, providing customers with all the information they need to make a purchase decision.</p>
+        </div>
+
+        <div class="file-path">client/src/pages/Cart.jsx</div>
+        <div class="file-description">
+            <p>Shopping cart page that shows all items a user has added to their cart. This page allows customers to review their selected products, modify quantities, remove items, and proceed to checkout, with clear displays of prices, totals, and any applicable discounts.</p>
+        </div>
+
+        <div class="file-path">client/src/pages/Checkout.jsx</div>
+        <div class="file-description">
+            <p>Checkout page where users review their order, enter shipping information, and select payment methods. This multi-step process typically includes order summary, shipping address form, payment details, and final confirmation before completing the purchase.</p>
+        </div>
+
+        <div class="file-path">client/src/pages/Account.jsx</div>
+        <div class="file-description">
+            <p>User account management page where customers can view and update their personal information. This page typically includes order history, profile settings, address book, payment methods, and other account-related features to help users manage their relationship with the e-commerce platform.</p>
+        </div>
+
+        <div class="file-path">client/src/pages/Login.jsx</div>
+        <div class="file-description">
+            <p>User authentication page where customers can log in to their existing accounts. This page includes a login form with email/username and password fields, as well as options for password recovery and account registration for new users.</p>
+        </div>
+
+        <div class="file-path">client/src/pages/Signup.jsx</div>
+        <div class="file-description">
+            <p>User registration page where new customers can create an account. This page collects necessary information such as name, email, password, and other relevant details to set up a new user profile in the system.</p>
+        </div>
+
+        <div class="file-path">client/src/pages/ForgetPassword.jsx</div>
+        <div class="file-description">
+            <p>Password recovery page where users can request a password reset if they've forgotten their credentials. This page typically includes a form to enter the registered email address and initiates the password reset process by sending a verification link.</p>
+        </div>
+
+        <div class="file-path">client/src/pages/Payment.jsx</div>
+        <div class="file-description">
+            <p>Payment processing page where users enter their payment information to complete a purchase. This secure page handles sensitive financial data and integrates with payment gateways to process transactions while maintaining compliance with security standards.</p>
+        </div>
+
+        <div class="file-path">client/src/pages/Success.jsx</div>
+        <div class="file-description">
+            <p>Order confirmation page displayed after a successful purchase. This page shows order details, confirmation state and final bill with a confetti!</p>
+        </div>
+
+        <div class="file-path">client/src/pages/Category.jsx</div>
+        <div class="file-description">
+            <p>Page that displays products filtered by a specific category. This page helps users browse products organized by type, style, or other classification, with options to further refine the selection using filters and sorting options.</p>
+        </div>
+
+        <div class="file-path">client/src/pages/Collections.jsx</div>
+        <div class="file-description">
+            <p>Page showcasing curated collections of products, often grouped by theme, season, or special promotions. This page highlights specially selected product groupings to inspire customers and encourage exploration of related items.</p>
+        </div>
+
+        <div class="file-path">client/src/pages/Contact.jsx</div>
+        <div class="file-description">
+            <p>Contact page with a form for customers to send messages to customer support or request information. This page provides multiple ways for users to get in touch with the business, including contact forms, email addresses, phone numbers, and possibly live chat options.</p>
+        </div>
+
+        <div class="file-path">client/src/pages/Delivery.jsx</div>
+        <div class="file-description">
+            <p>Information page detailing shipping options, delivery times, and related policies. This page helps customers understand their delivery choices, estimated arrival times, shipping costs, and any special handling instructions for their orders.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h2>Admin Pages</h2>
+
+        <div class="file-path">client/src/pages/admin/AdminDashboard.jsx</div>
+        <div class="file-description">
+            <p>Main dashboard for administrators, providing an overview of key metrics and quick access to management tools. This page typically shows summary statistics, recent activity, and shortcuts to various administrative functions.</p>
+        </div>
+
+        <div class="file-path">client/src/pages/admin/Dashboard.jsx</div>
+        <div class="file-description">
+            <p>Alternative or supplementary dashboard component for administrative functions. This might provide additional views or specialized information for different types of administrative users.</p>
+        </div>
+
+        <div class="file-path">client/src/pages/admin/ProductsAdmin.jsx</div>
+        <div class="file-description">
+            <p>Administrative interface for managing products in the catalog. This page allows administrators to add new products, edit existing ones, update inventory levels, set pricing, and manage product attributes and categories.</p>
+        </div>
+
+        <div class="file-path">client/src/pages/admin/UsersAdmin.jsx</div>
+        <div class="file-description">
+            <p>Administrative interface for managing user accounts. This page provides tools to view customer information, manage user permissions, handle account issues, and perform other user-related administrative tasks.</p>
+        </div>
+
+        <div class="file-path">client/src/pages/admin/OrdersAdmin.jsx</div>
+        <div class="file-description">
+            <p>Administrative interface for viewing and managing customer orders. This page allows staff to process orders, update order statuses, handle returns or exchanges, and manage other aspects of the order fulfillment process.</p>
+        </div>
+
+        <div class="file-path">client/src/pages/admin/CartsAdmin.jsx</div>
+        <div class="file-description">
+            <p>Administrative interface for viewing active shopping carts. This tool helps with abandoned cart recovery, customer support inquiries about cart contents, and monitoring shopping behavior patterns.</p>
+        </div>
+
+        <div class="file-path">client/src/pages/admin/CouponsAdmin.jsx</div>
+        <div class="file-description">
+            <p>Administrative interface for creating and managing discount coupons and promotional codes. This page allows marketing teams to create new promotions, set discount rules, track coupon usage, and analyze the effectiveness of different promotional campaigns.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h2>Backend Source Files</h2>
+
+        <div class="file-path">src/main/java/com/ecommerce/jewelleryMart/JewelleryMartApplication.java</div>
+        <div class="file-description">
+            <p>The main application class containing the <span class="highlight">main()</span> method that boots up the Spring Boot application. This class initializes the Spring application context and serves as the entry point for the backend service.</p>
+        </div>
+
+        <div class="file-path">src/main/java/com/ecommerce/jewelleryMart/config/SecurityConfig.java</div>
+        <div class="file-description">
+            <p>Spring Security configuration class that defines authentication and authorization rules. This file configures security settings including user authentication, role-based access control, CSRF protection, CORS policies, and other security-related aspects of the application.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h2>Backend Controllers</h2>
+
+        <div class="file-path">src/main/java/com/ecommerce/jewelleryMart/controller/AuthController.java</div>
+        <div class="file-description">
+            <p>REST controller handling user authentication operations. This controller manages endpoints for user login, registration, logout, password recovery, and other authentication-related functions, typically working with JWT or session-based authentication mechanisms.</p>
+        </div>
+
+        <div class="file-path">src/main/java/com/ecommerce/jewelleryMart/controller/UserController.java</div>
+        <div class="file-description">
+            <p>REST controller managing user-related operations. This controller handles endpoints for user profile management, account updates, user information retrieval, and other user-specific functions that don't relate directly to authentication.</p>
+        </div>
+
+        <div class="file-path">src/main/java/com/ecommerce/jewelleryMart/controller/ProductController.java</div>
+        <div class="file-description">
+            <p>REST controller handling product-related operations. This controller provides endpoints for CRUD operations on products, including creating new products, updating existing ones, retrieving product information, searching and filtering products, and managing product inventory.</p>
+        </div>
+
+        <div class="file-path">src/main/java/com/ecommerce/jewelleryMart/controller/CartController.java</div>
+        <div class="file-description">
+            <p>REST controller managing shopping cart operations. This controller handles endpoints for adding items to carts, removing items, updating quantities, retrieving cart contents, and other cart-related functions that support the shopping experience.</p>
+        </div>
+
+        <div class="file-path">src/main/java/com/ecommerce/jewelleryMart/controller/OrderController.java</div>
+        <div class="file-description">
+            <p>REST controller handling order processing. This controller provides endpoints for creating new orders, retrieving order history, updating order statuses, processing returns or cancellations, and other order management functions.</p>
+        </div>
+
+        <div class="file-path">src/main/java/com/ecommerce/jewelleryMart/controller/CheckoutController.java</div>
+        <div class="file-description">
+            <p>REST controller managing the checkout process. This controller handles endpoints for order review, payment processing, order confirmation, and other steps in the checkout workflow that bridge the gap between shopping and order fulfillment.</p>
+        </div>
+
+        <div class="file-path">src/main/java/com/ecommerce/jewelleryMart/controller/CouponController.java</div>
+        <div class="file-description">
+            <p>REST controller handling coupon-related operations. This controller provides endpoints for validating coupons, applying discounts to orders, creating new promotional codes, and managing the lifecycle of discount offers within the system.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h2>Backend Models</h2>
+
+        <div class="file-path">src/main/java/com/ecommerce/jewelleryMart/model/User.java</div>
+        <div class="file-description">
+            <p>JPA entity class representing a user account. This class defines the structure of user data stored in the database, including fields for authentication credentials, personal information, roles, and other user attributes, along with relationships to other entities like orders and carts.</p>
+        </div>
+
+        <div class="file-path">src/main/java/com/ecommerce/jewelleryMart/model/Product.java</div>
+        <div class="file-description">
+            <p>JPA entity class representing a product in the catalog. This class defines the structure of product data including fields for product name, description, price, inventory levels, categories, attributes, images, and other product-related information needed for display and management in the e-commerce system.</p>
+        </div>
+
+        <div class="file-path">src/main/java/com/ecommerce/jewelleryMart/model/Cart.java</div>
+        <div class="file-description">
+            <p>JPA entity class representing a shopping cart. This class defines the structure of cart data including the items selected by a user, quantities, prices at time of addition, and other cart-specific information, typically with relationships to both user and product entities.</p>
+        </div>
+
+        <div class="file-path">src/main/java/com/ecommerce/jewelleryMart/model/Order.java</div>
+        <div class="file-description">
+            <p>JPA entity class representing a customer order. This class defines the structure of order data including order items, quantities, prices, shipping information, payment details, order status, and other information needed to process and fulfill customer purchases.</p>
+        </div>
+
+        <div class="file-path">src/main/java/com/ecommerce/jewelleryMart/model/Coupon.java</div>
+        <div class="file-description">
+            <p>JPA entity class representing a discount coupon. This class defines the structure of coupon data including the coupon code, discount value or percentage, validity period, usage restrictions, and other attributes that determine how the coupon can be applied to orders.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h2>Backend Repositories</h2>
+
+        <div class="file-path">src/main/java/com/ecommerce/jewelleryMart/repository/UserRepository.java</div>
+        <div class="file-description">
+            <p>Spring Data JPA repository interface for User entities. This interface extends JpaRepository to provide CRUD operations and custom query methods for user data, enabling database access and manipulation of user records without requiring boilerplate implementation code.</p>
+        </div>
+
+        <div class="file-path">src/main/java/com/ecommerce/jewelleryMart/repository/ProductRepository.java</div>
+        <div class="file-description">
+            <p>Spring Data JPA repository interface for Product entities. This interface provides database access and query methods specific to product data, supporting operations like product searches, filtering, and inventory management through method naming conventions and custom queries.</p>
+        </div>
+
+        <div class="file-path">src/main/java/com/ecommerce/jewelleryMart/repository/CartRepository.java</div>
+        <div class="file-description">
+            <p>Spring Data JPA repository interface for Cart entities. This interface offers database operations tailored to shopping cart data, including methods to retrieve, update, and manage cart contents with relationships to both users and products.</p>
+        </div>
+
+        <div class="file-path">src/main/java/com/ecommerce/jewelleryMart/repository/OrderRepository.java</div>
+        <div class="file-description">
+            <p>Spring Data JPA repository interface for Order entities. This interface provides specialized database operations for order data, supporting complex queries related to order processing, fulfillment, and historical analysis of customer purchases.</p>
+        </div>
+
+        <div class="file-path">src/main/java/com/ecommerce/jewelleryMart/repository/CouponRepository.java</div>
+        <div class="file-description">
+            <p>Spring Data JPA repository interface for Coupon entities. This interface enables database operations specific to coupon management, including validation, retrieval, and tracking of promotional codes and their usage within the system.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h2>Backend Configuration</h2>
+
+        <div class="file-path">src/main/resources/application.properties</div>
+        <div class="file-description">
+            <p>Spring Boot configuration file containing application properties. This file defines various settings for the application including database connection details, server configuration, security settings, logging configuration, and other environment-specific parameters that control the behavior of the Spring Boot application.</p>
+        </div>
+    </div>
+
+    <div class="note">
+        <p><strong>Project Architecture Note:</strong> This application follows a modern full-stack architecture with clear separation between frontend and backend concerns. The React frontend communicates with the Spring Boot backend through RESTful API endpoints. The backend implements a layered architecture with controllers handling HTTP requests, services containing business logic, repositories managing data access, and models representing the domain entities. This structure promotes maintainability, scalability, and testability of the application.</p>
+    </div>
+</body>
+</html>
