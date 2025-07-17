@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Report: Work Finder Project</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Neutrals -->
+    <!-- Application Structure Plan: A single-page dashboard design is used to transform the linear report into an explorable, interactive experience. A fixed sidebar allows for non-sequential navigation between key report areas: Overview, Features, Technology, Architecture, and Implementation. This task-oriented structure enables users (e.g., stakeholders, developers) to quickly access specific information without scrolling through the entire document. The main content area dynamically displays the selected section, using interactive elements like clickable diagrams and charts to make complex information, such as the system architecture and project roadmap, more digestible and engaging. This design prioritizes usability and efficient information retrieval over the original report's format. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Project Features & Phases -> Goal: Organize/Change -> Viz/Method: Interactive Tabs for Phases -> Interaction: Click tabs to reveal feature cards for each phase. Justification: Chunks the roadmap into manageable parts, clarifying the development sequence. Method: HTML/JS.
+        - Report Info: Technology Stack -> Goal: Organize -> Viz/Method: Grid of info cards. -> Interaction: Hover to see the technology's role. Justification: Provides a quick, visual summary of the project's tech foundation. Method: HTML/Tailwind.
+        - Report Info: System Architecture -> Goal: Organize/Relationships -> Viz/Method: Interactive Diagram built with HTML/CSS. -> Interaction: Click on a component (e.g., "Django Backend") to see its detailed description. Justification: Turns a static, complex diagram into an explorable tool, enhancing understanding of data flow. Method: HTML/JS.
+        - Report Info: Implementation Plan -> Goal: Compare/Inform -> Viz/Method: Horizontal Bar Chart. -> Interaction: Tooltips on hover provide details. Justification: Visually represents feature priority and phasing, making the project timeline immediately apparent. Library: Chart.js (Canvas).
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF8;
+            color: #3f3c3a;
+        }
+        .nav-link {
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+        .nav-link.active {
+            background-color: #F5F1ED;
+            color: #A36A00;
+            border-left-color: #A36A00;
+        }
+        .nav-link:hover {
+            background-color: #F5F1ED;
+        }
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+        }
+        .arch-box {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .arch-box:hover, .arch-box.selected {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border-color: #A36A00;
+        }
+        .phase-tab {
+            transition: all 0.2s ease-in-out;
+        }
+        .phase-tab.active {
+            background-color: #A36A00;
+            color: #ffffff;
+        }
+        .feature-card {
+            border-left: 4px solid #D1CFCB;
+            transition: all 0.3s ease;
+        }
+        .feature-card:hover {
+             border-left-color: #A36A00;
+             transform: translateX(4px);
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 500px;
+            max-height: 70vh;
+        }
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <div class="relative min-h-screen md:flex">
+        <aside class="bg-[#F9F6F2] text-gray-700 w-full md:w-64 py-4 px-2 md:py-8 md:px-4 fixed bottom-0 md:relative md:min-h-screen border-t md:border-t-0 md:border-r border-gray-200">
+            <div class="hidden md:block px-4 mb-8">
+                <h1 class="text-xl font-bold text-gray-800">Work Finder</h1>
+                <p class="text-sm text-gray-500 mt-1">Project Dashboard</p>
+            </div>
+            <nav id="main-nav" class="flex flex-row md:flex-col justify-around md:justify-start">
+                <a href="#overview" class="nav-link active flex items-center p-3 my-1 rounded-lg">
+                    <span class="text-xl">📜</span>
+                    <span class="ml-3 hidden md:block">Overview</span>
+                </a>
+                <a href="#features" class="nav-link flex items-center p-3 my-1 rounded-lg">
+                    <span class="text-xl">🚀</span>
+                    <span class="ml-3 hidden md:block">Features & Phases</span>
+                </a>
+                <a href="#tech" class="nav-link flex items-center p-3 my-1 rounded-lg">
+                    <span class="text-xl">⚙️</span>
+                    <span class="ml-3 hidden md:block">Technology Stack</span>
+                </a>
+                <a href="#architecture" class="nav-link flex items-center p-3 my-1 rounded-lg">
+                    <span class="text-xl">🏗️</span>
+                    <span class="ml-3 hidden md:block">Architecture</span>
+                </a>
+                <a href="#implementation" class="nav-link flex items-center p-3 my-1 rounded-lg">
+                    <span class="text-xl">📊</span>
+                    <span class="ml-3 hidden md:block">Implementation Plan</span>
+                </a>
+            </nav>
+        </aside>
+
+        <main class="flex-1 p-6 md:p-10 pb-24 md:pb-10">
+            <section id="overview" class="content-section active">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">Project Overview</h2>
+                <p class="text-gray-600 mb-8">This section outlines the core mission and vision of the Work Finder project, an AI-powered agent designed to revolutionize the job search process.</p>
+                
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+                    <h3 class="font-bold text-lg text-yellow-800 mb-2">Motto</h3>
+                    <p class="text-2xl font-semibold italic text-gray-700">"Navigate Your Career, Intelligently."</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6 mt-6">
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+                        <h3 class="font-bold text-lg text-yellow-800 mb-2">Project Goal</h3>
+                        <p class="text-gray-600">To develop an advanced AI-powered career assistant that streamlines the job application process for users by providing personalized insights, interview preparation, and skill development guidance based on their resume and target job roles.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+                        <h3 class="font-bold text-lg text-yellow-800 mb-2">Project Aim</h3>
+                        <p class="text-gray-600">Our primary aim is to empower job seekers with intelligent tools that enhance their employability, reduce job search friction, and boost their confidence through data-driven feedback and interactive learning experiences. We envision a platform that acts as a personal career coach, available 24/7.</p>
+                    </div>
+                </div>
+                 <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 mt-6">
+                    <h3 class="font-bold text-lg text-yellow-800 mb-2">Introduction</h3>
+                    <p class="text-gray-600">In today's competitive job market, standing out requires more than just a well-written resume. Job seekers need tailored advice, deep understanding of job requirements, and effective preparation strategies. This project aims to address these needs by building an AI Agent that leverages cutting-edge Large Language Models (LLMs) and agentic frameworks to provide a comprehensive suite of tools for career advancement. From initial resume analysis to mock interviews and skill gap identification, our agent will guide users every step of the way.</p>
+                </div>
+            </section>
+
+            <section id="features" class="content-section">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">Features & Phases</h2>
+                <p class="text-gray-600 mb-8">Explore the project's roadmap, broken down into three distinct implementation phases. Click on a phase to see the features planned for that stage.</p>
+                
+                <div id="phase-tabs" class="flex space-x-2 md:space-x-4 border-b-2 border-gray-200 mb-6">
+                    <button data-phase="1" class="phase-tab active font-semibold py-2 px-4 rounded-t-lg">Phase 1: MVP</button>
+                    <button data-phase="2" class="phase-tab font-semibold py-2 px-4 rounded-t-lg">Phase 2: Enhancements</button>
+                    <button data-phase="3" class="phase-tab font-semibold py-2 px-4 rounded-t-lg">Phase 3: Future</button>
+                </div>
+                
+                <div id="features-content" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                </div>
+            </section>
+            
+            <section id="tech" class="content-section">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">Technology Stack</h2>
+                <p class="text-gray-600 mb-8">This project is built on a modern, robust technology stack designed for performance and scalability. Each component plays a critical role in delivering the agent's intelligent features.</p>
+                 <div id="tech-stack-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                 </div>
+            </section>
+
+            <section id="architecture" class="content-section">
+                 <h2 class="text-3xl font-bold text-gray-800 mb-2">System Architecture</h2>
+                <p class="text-gray-600 mb-8">This diagram illustrates the flow of information between the user, the backend, the AI agent, and external services. Click on any component to learn more about its specific role in the system.</p>
+
+                <div class="w-full bg-white p-4 md:p-8 rounded-lg shadow-sm border border-gray-100">
+                    <div id="architecture-diagram" class="relative flex flex-col items-center space-y-4">
+                        <div data-id="user" class="arch-box bg-blue-50 border-2 border-blue-200 text-blue-800 p-4 rounded-lg w-64 text-center">User (Browser)</div>
+                        <div class="text-3xl font-light text-gray-400">↓</div>
+                        <div data-id="backend" class="arch-box bg-green-50 border-2 border-green-200 text-green-800 p-4 rounded-lg w-64 text-center">Django Backend</div>
+                        <div class="text-3xl font-light text-gray-400">↓</div>
+                        <div data-id="agent" class="arch-box bg-purple-50 border-2 border-purple-200 text-purple-800 p-4 rounded-lg w-64 text-center">Agno Framework (Agent)</div>
+                        <div class="absolute top-1/2 -translate-y-1/2 left-0 md:-left-8 lg:-left-16 flex flex-col items-center space-y-4">
+                            <div class="text-3xl font-light text-gray-400 transform -rotate-90">→</div>
+                            <div data-id="db" class="arch-box bg-yellow-50 border-2 border-yellow-200 text-yellow-800 p-4 rounded-lg text-center w-40">MongoDB</div>
+                        </div>
+                        <div class="absolute top-1/2 -translate-y-1/2 right-0 md:-right-8 lg:-right-16 flex flex-col items-center space-y-4">
+                            <div class="text-3xl font-light text-gray-400 transform rotate-90">←</div>
+                            <div data-id="services" class="arch-box bg-red-50 border-2 border-red-200 text-red-800 p-4 rounded-lg text-center w-40">External APIs</div>
+                        </div>
+                    </div>
+                     <div id="architecture-details" class="mt-8 p-6 bg-gray-50 rounded-lg min-h-[100px] border border-gray-200">
+                        <p class="text-gray-500 text-center">Click a component to see details.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="implementation" class="content-section">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">Implementation Plan</h2>
+                <p class="text-gray-600 mb-8">This chart visualizes the feature implementation roadmap. Features are grouped by their priority phase, providing a clear overview of the development timeline from the Minimum Viable Product (MVP) to future enhancements.</p>
+                <div class="bg-white p-4 md:p-8 rounded-lg shadow-sm border border-gray-100">
+                    <div class="chart-container">
+                        <canvas id="implementationChart"></canvas>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const navLinks = document.querySelectorAll('#main-nav a');
+            const contentSections = document.querySelectorAll('.content-section');
+
+            const featuresData = {
+                '1': [
+                    { title: 'Login/Registration', desc: 'Secure user authentication and profile management.' },
+                    { title: 'Resume Upload', desc: 'Allow users to upload their resumes (PDF, DOCX).' },
+                    { title: 'Job Description Input', desc: 'Enable users to paste or upload job descriptions.' },
+                    { title: 'Job Role Input', desc: 'Allow users to specify target job roles.' },
+                    { title: 'Job Role Match %', desc: 'AI-driven percentage match between resume/skills and JD/job role.' },
+                    { title: 'Interview Questions + Answers', desc: 'Generate HR/technical questions with sample answers.' },
+                    { title: 'Skill Evaluation', desc: 'Analyze resume against JD to identify strengths and weaknesses.' },
+                    { title: 'Mock Interview (Chat-based)', desc: 'Interactive text-based mock interview simulator.' },
+                ],
+                '2': [
+                    { title: 'Practice Tests/Quizzes', desc: 'AI-generated quizzes to assess specific skills.' },
+                    { title: 'Progress Tracking', desc: 'Dashboard to monitor user progress and scores.' },
+                    { title: 'Resume & Portfolio Maker', desc: 'Tools to create and optimize resumes and portfolios.' },
+                    { title: 'Client Onboarding', desc: 'A guided experience for first-time users.' },
+                ],
+                '3': [
+                    { title: 'Mock Interview (Voice-based)', desc: 'Integrate voice-to-text for a realistic interview experience.' },
+                ]
+            };
+            
+            const techData = [
+                { name: 'Agno Framework', role: 'AI Agent Orchestration', icon: '🧠', detail: 'Serves as the backbone for orchestrating complex AI tasks, managing workflows, memory, tool usage, and decision-making.' },
+                { name: 'GroqCloud', role: 'LLM Inference', icon: '⚡️', detail: 'Provides high-speed inference for LLMs (Llama, Mixtral), ideal for real-time applications like mock interviews and instant feedback.' },
+                { name: 'Gemini API', role: 'Voice-to-Text (VTT)', icon: '🗣️', detail: 'Will be integrated for robust voice-to-text capabilities in the future voice-based mock interview feature.' },
+                { name: 'Django', role: 'Backend & Frontend', icon: '🐍', detail: 'A comprehensive Python web framework for handling API logic, URL routing, database interaction, and rendering frontend templates.' },
+                { name: 'Bootstrap', role: 'UI Styling', icon: '🎨', detail: 'A responsive styling framework used alongside Django templates to ensure a visually appealing and mobile-friendly user interface.' },
+                { name: 'MongoDB', role: 'Database', icon: '📦', detail: 'A flexible NoSQL document database used for storing user data, resumes, job descriptions, and AI-generated feedback.' }
+            ];
+
+            const architectureData = {
+                user: {
+                    title: "User (Browser)",
+                    text: "The user interacts with the application through a standard web browser. The frontend, built with Django templates and Bootstrap, renders the UI and captures user inputs like resume uploads and text entries."
+                },
+                backend: {
+                    title: "Django Backend",
+                    text: "The core of the application logic resides here. Django handles web requests, manages user authentication, processes file uploads, and acts as the central orchestration layer, communicating with the database and the AI agent framework."
+                },
+                agent: {
+                    title: "Agno Framework (Agent)",
+                    text: "This is the brain of the operation. The Agno Framework receives tasks from the Django backend, decomposes them into smaller steps, and decides which tools to use (e.g., calling an LLM, accessing the database) to fulfill the user's request."
+                },
+                db: {
+                    title: "MongoDB Database",
+                    text: "A NoSQL database that stores all persistent data, including user profiles, parsed resume content, job descriptions, and the history of mock interviews and feedback. Its flexible schema is ideal for storing varied AI-generated content."
+                },
+                services: {
+                    title: "External APIs (GroqCloud & Gemini)",
+                    text: "The Agno agent makes calls to these external services. GroqCloud provides the fast LLM inference needed for analysis and generation, while the Gemini API will handle future voice-to-text transcription."
+                }
+            };
+
+            const implementationChartData = {
+                labels: [
+                    'Login/Register', 'Resume Upload', 'JD Input', 'Role Match %', 
+                    'Q&A Generation', 'Skill Evaluation', 'Chat-based Mock Interview', 
+                    'Practice Quizzes', 'Progress Tracking', 'Resume Maker', 
+                    'Onboarding', 'Voice-based Mock Interview'
+                ],
+                datasets: [{
+                    label: 'Implementation Phase',
+                    data: [1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3],
+                    backgroundColor: (context) => {
+                        const value = context.dataset.data[context.dataIndex];
+                        if (value === 1) return 'rgba(124, 58, 237, 0.7)'; // Phase 1 - Purple
+                        if (value === 2) return 'rgba(29, 78, 216, 0.7)'; // Phase 2 - Blue
+                        return 'rgba(219, 39, 119, 0.7)'; // Phase 3 - Pink
+                    },
+                    borderColor: (context) => {
+                        const value = context.dataset.data[context.dataIndex];
+                        if (value === 1) return 'rgba(124, 58, 237, 1)';
+                        if (value === 2) return 'rgba(29, 78, 216, 1)';
+                        return 'rgba(219, 39, 119, 1)';
+                    },
+                    borderWidth: 1
+                }]
+            };
+
+            function handleNavigation(e) {
+                e.preventDefault();
+                const targetId = e.currentTarget.getAttribute('href').substring(1);
+                
+                navLinks.forEach(link => link.classList.remove('active'));
+                e.currentTarget.classList.add('active');
+
+                contentSections.forEach(section => {
+                    section.classList.remove('active');
+                    if (section.id === targetId) {
+                        section.classList.add('active');
+                    }
+                });
+            }
+
+            function renderFeatures(phase) {
+                const container = document.getElementById('features-content');
+                container.innerHTML = '';
+                featuresData[phase].forEach(feature => {
+                    const card = document.createElement('div');
+                    card.className = 'feature-card bg-white p-4 rounded-lg shadow-sm';
+                    card.innerHTML = `
+                        <h4 class="font-semibold text-gray-800">${feature.title}</h4>
+                        <p class="text-sm text-gray-600 mt-1">${feature.desc}</p>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+
+            function renderTechStack() {
+                const container = document.getElementById('tech-stack-grid');
+                container.innerHTML = '';
+                techData.forEach(tech => {
+                    const card = document.createElement('div');
+                    card.className = 'bg-white p-6 rounded-lg shadow-sm border border-gray-100 flex flex-col items-start';
+                    card.innerHTML = `
+                        <div class="flex items-center mb-3">
+                           <span class="text-3xl mr-3">${tech.icon}</span>
+                            <div>
+                               <h4 class="font-semibold text-lg text-gray-800">${tech.name}</h4>
+                               <p class="text-sm font-medium text-amber-700">${tech.role}</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 text-sm">${tech.detail}</p>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+
+            function handleArchitectureClick(e) {
+                const targetBox = e.target.closest('.arch-box');
+                if (!targetBox) return;
+                
+                const id = targetBox.dataset.id;
+                const data = architectureData[id];
+                const detailsContainer = document.getElementById('architecture-details');
+                
+                document.querySelectorAll('.arch-box').forEach(box => box.classList.remove('selected'));
+                targetBox.classList.add('selected');
+
+                if (data) {
+                    detailsContainer.innerHTML = `
+                        <h4 class="font-bold text-lg text-gray-800 mb-2">${data.title}</h4>
+                        <p class="text-gray-600">${data.text}</p>
+                    `;
+                }
+            }
+
+            navLinks.forEach(link => link.addEventListener('click', handleNavigation));
+
+            const phaseTabs = document.querySelectorAll('.phase-tab');
+            phaseTabs.forEach(tab => {
+                tab.addEventListener('click', (e) => {
+                    phaseTabs.forEach(t => t.classList.remove('active'));
+                    e.currentTarget.classList.add('active');
+                    renderFeatures(e.currentTarget.dataset.phase);
+                });
+            });
+            
+            document.getElementById('architecture-diagram').addEventListener('click', handleArchitectureClick);
+
+            renderFeatures('1');
+            renderTechStack();
+            
+            const ctx = document.getElementById('implementationChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: implementationChartData,
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            display: false,
+                            beginAtZero: true
+                        },
+                        y: {
+                            ticks: {
+                                font: {
+                                    size: 12
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    const value = context.raw;
+                                    label += 'Phase ' + value;
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
