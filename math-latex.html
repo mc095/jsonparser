@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visual Math Calculator</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js" crossorigin="anonymous"></script>
+    
+    <style>
+        .calc-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 3.5rem;
+            padding: 0.75rem;
+            background: linear-gradient(to bottom, #ffffff, #f8fafc);
+            border: 2px solid #cbd5e1;
+            border-radius: 0.5rem;
+            font-size: 1.125rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            user-select: none;
+        }
+        .calc-button:hover {
+            background: linear-gradient(to bottom, #f8fafc, #f1f5f9);
+            border-color: #3b82f6;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        .calc-button:active {
+            transform: translateY(0);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        .display-area {
+            background: #1e293b;
+            color: #f1f5f9;
+            border: 3px solid #334155;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            min-height: 8rem;
+            font-family: 'Courier New', monospace;
+            font-size: 1.5rem;
+            overflow-x: auto;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.3);
+        }
+        .input-box {
+            display: inline-block;
+            min-width: 1.5rem;
+            padding: 0.25rem 0.5rem;
+            background: #3b82f6;
+            color: white;
+            border-radius: 0.25rem;
+            margin: 0 0.125rem;
+            cursor: text;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+        .input-box.filled {
+            background: #10b981;
+            animation: none;
+        }
+        .katex-display {
+            margin: 1rem 0;
+            font-size: 1.75rem;
+        }
+        .button-grid {
+            display: grid;
+            gap: 0.5rem;
+        }
+        .grid-4 { grid-template-columns: repeat(4, 1fr); }
+        .grid-5 { grid-template-columns: repeat(5, 1fr); }
+        .grid-6 { grid-template-columns: repeat(6, 1fr); }
+        
+        .section-header {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 0.75rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .frac-display {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 0.25rem;
+        }
+        .frac-num, .frac-den {
+            padding: 0.125rem 0.25rem;
+        }
+        .frac-line {
+            width: 100%;
+            height: 2px;
+            background: currentColor;
+            margin: 0.125rem 0;
+        }
+        
+        .power-display {
+            display: inline-block;
+            position: relative;
+        }
+        .power-base {
+            display: inline-block;
+        }
+        .power-exp {
+            display: inline-block;
+            font-size: 0.75em;
+            vertical-align: super;
+            margin-left: 0.125rem;
+        }
+        
+        .sqrt-display {
+            display: inline-block;
+            position: relative;
+        }
+        .sqrt-symbol {
+            font-size: 1.5em;
+            margin-right: 0.125rem;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-100 to-slate-200 min-h-screen p-4">
+
+    <div class="max-w-6xl mx-auto">
+        <!-- Display Screen -->
+        <div class="bg-slate-800 rounded-2xl p-6 mb-4 shadow-2xl">
+            <div class="display-area" id="display">
+                <span style="color: #64748b;">Start building your equation...</span>
+            </div>
+        </div>
+
+        <!-- Main Calculator Layout -->
+        <div class="grid md:grid-cols-2 gap-4 mb-4">
+            
+            <!-- Left Panel: Numbers & Basic Operations -->
+            <div class="bg-white rounded-xl p-4 shadow-lg">
+                <div class="section-header">Basic Operations</div>
+                
+                <div class="button-grid grid-4 mb-4">
+                    <button class="calc-button" onclick="insertNumber('7')">7</button>
+                    <button class="calc-button" onclick="insertNumber('8')">8</button>
+                    <button class="calc-button" onclick="insertNumber('9')">9</button>
+                    <button class="calc-button" onclick="insertOperator('÷')">÷</button>
+                    
+                    <button class="calc-button" onclick="insertNumber('4')">4</button>
+                    <button class="calc-button" onclick="insertNumber('5')">5</button>
+                    <button class="calc-button" onclick="insertNumber('6')">6</button>
+                    <button class="calc-button" onclick="insertOperator('×')">×</button>
+                    
+                    <button class="calc-button" onclick="insertNumber('1')">1</button>
+                    <button class="calc-button" onclick="insertNumber('2')">2</button>
+                    <button class="calc-button" onclick="insertNumber('3')">3</button>
+                    <button class="calc-button" onclick="insertOperator('−')">−</button>
+                    
+                    <button class="calc-button" onclick="insertNumber('0')">0</button>
+                    <button class="calc-button" onclick="insertNumber('.')">.</button>
+                    <button class="calc-button" onclick="insertOperator('=')">=</button>
+                    <button class="calc-button" onclick="insertOperator('+')">+</button>
+                </div>
+
+                <div class="button-grid grid-4">
+                    <button class="calc-button" onclick="insertOperator('(')">(</button>
+                    <button class="calc-button" onclick="insertOperator(')')">)</button>
+                    <button class="calc-button" onclick="insertVariable('x')">x</button>
+                    <button class="calc-button" onclick="insertVariable('y')">y</button>
+                </div>
+            </div>
+
+            <!-- Right Panel: Advanced Functions -->
+            <div class="bg-white rounded-xl p-4 shadow-lg">
+                <div class="section-header">Advanced Functions</div>
+                
+                <div class="button-grid grid-4 mb-4">
+                    <button class="calc-button" onclick="insertFraction()" style="font-size: 1rem;">
+                        <span style="display:inline-block;text-align:center;">
+                            <span style="display:block;border-bottom:1px solid;">a</span>
+                            <span style="display:block;">b</span>
+                        </span>
+                    </button>
+                    <button class="calc-button" onclick="insertPower()">x<sup>n</sup></button>
+                    <button class="calc-button" onclick="insertSubscript()">x<sub>n</sub></button>
+                    <button class="calc-button" onclick="insertSqrt()">√</button>
+                    
+                    <button class="calc-button" onclick="insertNthRoot()"><sup>n</sup>√</button>
+                    <button class="calc-button" onclick="insertSum()">Σ</button>
+                    <button class="calc-button" onclick="insertIntegral()">∫</button>
+                    <button class="calc-button" onclick="insertLimit()">lim</button>
+                </div>
+
+                <div class="button-grid grid-5 mb-4">
+                    <button class="calc-button" onclick="insertFunction('sin')">sin</button>
+                    <button class="calc-button" onclick="insertFunction('cos')">cos</button>
+                    <button class="calc-button" onclick="insertFunction('tan')">tan</button>
+                    <button class="calc-button" onclick="insertFunction('log')">log</button>
+                    <button class="calc-button" onclick="insertFunction('ln')">ln</button>
+                </div>
+
+                <div class="button-grid grid-6">
+                    <button class="calc-button" onclick="insertGreek('α')">α</button>
+                    <button class="calc-button" onclick="insertGreek('β')">β</button>
+                    <button class="calc-button" onclick="insertGreek('θ')">θ</button>
+                    <button class="calc-button" onclick="insertGreek('π')">π</button>
+                    <button class="calc-button" onclick="insertGreek('Σ')">Σ</button>
+                    <button class="calc-button" onclick="insertGreek('Δ')">Δ</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Control Buttons -->
+        <div class="grid grid-cols-2 gap-4 mb-4">
+            <button onclick="clearAll()" class="calc-button bg-red-500 text-white border-red-600 hover:bg-red-600 text-lg font-bold">
+                Clear All
+            </button>
+            <button onclick="deleteLastElement()" class="calc-button bg-orange-500 text-white border-orange-600 hover:bg-orange-600 text-lg font-bold">
+                Delete Last
+            </button>
+        </div>
+
+        <!-- Preview & LaTeX Output -->
+        <div class="bg-white rounded-xl p-6 shadow-lg">
+            <div class="section-header">Preview</div>
+            <div id="preview" class="min-h-[6rem] flex items-center justify-center bg-slate-50 rounded-lg border-2 border-slate-200 p-4 mb-4">
+                <span class="text-slate-400">Your equation will appear here...</span>
+            </div>
+            
+            <div class="section-header">LaTeX Code</div>
+            <div class="flex gap-2">
+                <input type="text" id="latex-output" readonly class="flex-1 p-3 bg-slate-50 border-2 border-slate-300 rounded-lg font-mono text-sm">
+                <button onclick="copyLatex()" class="calc-button bg-green-500 text-white border-green-600 hover:bg-green-600 px-6">
+                    Copy
+                </button>
+            </div>
+            <span id="copy-msg" class="text-green-600 text-sm opacity-0 transition-opacity mt-2 inline-block">Copied!</span>
+        </div>
+    </div>
+
+    <script>
+        let equation = [];
+        let awaitingInput = null;
+
+        function render() {
+            const display = document.getElementById('display');
+            const preview = document.getElementById('preview');
+            const latexOutput = document.getElementById('latex-output');
+            
+            if (equation.length === 0) {
+                display.innerHTML = '<span style="color: #64748b;">Start building your equation...</span>';
+                preview.innerHTML = '<span class="text-slate-400">Your equation will appear here...</span>';
+                latexOutput.value = '';
+                return;
+            }
+
+            // Build display
+            let displayHTML = '';
+            equation.forEach((item, idx) => {
+                if (item.type === 'number' || item.type === 'variable' || item.type === 'operator' || item.type === 'greek') {
+                    displayHTML += item.value;
+                } else if (item.type === 'fraction') {
+                    displayHTML += `<span class="frac-display">
+                        <span class="frac-num">${item.numerator || '<span class="input-box' + (awaitingInput === 'frac-num-' + idx ? '' : ' filled') + '">?</span>'}</span>
+                        <span class="frac-line"></span>
+                        <span class="frac-den">${item.denominator || '<span class="input-box' + (awaitingInput === 'frac-den-' + idx ? '' : ' filled') + '">?</span>'}</span>
+                    </span>`;
+                } else if (item.type === 'power') {
+                    displayHTML += `<span class="power-display">
+                        <span class="power-base">${item.base || '<span class="input-box' + (awaitingInput === 'pow-base-' + idx ? '' : ' filled') + '">?</span>'}</span>
+                        <span class="power-exp">${item.exponent || '<span class="input-box' + (awaitingInput === 'pow-exp-' + idx ? '' : ' filled') + '">?</span>'}</span>
+                    </span>`;
+                } else if (item.type === 'subscript') {
+                    displayHTML += `${item.base || '<span class="input-box">?</span>'}<sub>${item.sub || '<span class="input-box">?</span>'}</sub>`;
+                } else if (item.type === 'sqrt') {
+                    displayHTML += `<span class="sqrt-display"><span class="sqrt-symbol">√</span>${item.content || '<span class="input-box">?</span>'}</span>`;
+                } else if (item.type === 'nthroot') {
+                    displayHTML += `<sup>${item.n || '<span class="input-box">?</span>'}</sup><span class="sqrt-display"><span class="sqrt-symbol">√</span>${item.content || '<span class="input-box">?</span>'}</span>`;
+                } else if (item.type === 'sum') {
+                    displayHTML += `Σ<sub>${item.lower || '<span class="input-box">?</span>'}</sub><sup>${item.upper || '<span class="input-box">?</span>'}</sup>`;
+                } else if (item.type === 'integral') {
+                    displayHTML += `∫<sub>${item.lower || '<span class="input-box">?</span>'}</sub><sup>${item.upper || '<span class="input-box">?</span>'}</sup>`;
+                } else if (item.type === 'limit') {
+                    displayHTML += `lim<sub>${item.approach || '<span class="input-box">?</span>'}</sub>`;
+                } else if (item.type === 'function') {
+                    displayHTML += item.name + '(';
+                }
+            });
+            
+            display.innerHTML = displayHTML;
+
+            // Build LaTeX
+            let latex = '';
+            equation.forEach(item => {
+                if (item.type === 'number' || item.type === 'variable') {
+                    latex += item.value;
+                } else if (item.type === 'operator') {
+                    const opMap = {'+': '+', '−': '-', '×': '\\times', '÷': '\\div', '=': '=', '(': '(', ')': ')'};
+                    latex += opMap[item.value] || item.value;
+                } else if (item.type === 'greek') {
+                    const greekMap = {'α': '\\alpha', 'β': '\\beta', 'θ': '\\theta', 'π': '\\pi', 'Σ': '\\Sigma', 'Δ': '\\Delta'};
+                    latex += greekMap[item.value] || item.value;
+                } else if (item.type === 'fraction') {
+                    latex += `\\frac{${item.numerator || '?'}}{${item.denominator || '?'}}`;
+                } else if (item.type === 'power') {
+                    latex += `{${item.base || '?'}}^{${item.exponent || '?'}}`;
+                } else if (item.type === 'subscript') {
+                    latex += `{${item.base || '?'}}_{${item.sub || '?'}}`;
+                } else if (item.type === 'sqrt') {
+                    latex += `\\sqrt{${item.content || '?'}}`;
+                } else if (item.type === 'nthroot') {
+                    latex += `\\sqrt[${item.n || '?'}]{${item.content || '?'}}`;
+                } else if (item.type === 'sum') {
+                    latex += `\\sum_{${item.lower || '?'}}^{${item.upper || '?'}}`;
+                } else if (item.type === 'integral') {
+                    latex += `\\int_{${item.lower || '?'}}^{${item.upper || '?'}}`;
+                } else if (item.type === 'limit') {
+                    latex += `\\lim_{${item.approach || '?'}}`;
+                } else if (item.type === 'function') {
+                    latex += '\\' + item.name + '(';
+                }
+            });
+
+            latexOutput.value = latex;
+
+            // Render preview
+            if (latex && !latex.includes('?')) {
+                try {
+                    katex.render(latex, preview, { displayMode: true, throwOnError: true });
+                } catch (e) {
+                    preview.innerHTML = '<span class="text-orange-400">Complete the equation to see preview</span>';
+                }
+            } else {
+                preview.innerHTML = '<span class="text-orange-400">Complete the equation to see preview</span>';
+            }
+        }
+
+        function insertNumber(num) {
+            equation.push({ type: 'number', value: num });
+            render();
+        }
+
+        function insertVariable(v) {
+            equation.push({ type: 'variable', value: v });
+            render();
+        }
+
+        function insertOperator(op) {
+            equation.push({ type: 'operator', value: op });
+            render();
+        }
+
+        function insertGreek(g) {
+            equation.push({ type: 'greek', value: g });
+            render();
+        }
+
+        function insertFraction() {
+            const num = prompt('Enter numerator:');
+            const den = prompt('Enter denominator:');
+            if (num && den) {
+                equation.push({ type: 'fraction', numerator: num, denominator: den });
+                render();
+            }
+        }
+
+        function insertPower() {
+            const base = prompt('Enter base:');
+            const exp = prompt('Enter exponent:');
+            if (base && exp) {
+                equation.push({ type: 'power', base: base, exponent: exp });
+                render();
+            }
+        }
+
+        function insertSubscript() {
+            const base = prompt('Enter base:');
+            const sub = prompt('Enter subscript:');
+            if (base && sub) {
+                equation.push({ type: 'subscript', base: base, sub: sub });
+                render();
+            }
+        }
+
+        function insertSqrt() {
+            const content = prompt('Enter content under square root:');
+            if (content) {
+                equation.push({ type: 'sqrt', content: content });
+                render();
+            }
+        }
+
+        function insertNthRoot() {
+            const n = prompt('Enter root degree (e.g., 3 for cube root):');
+            const content = prompt('Enter content under root:');
+            if (n && content) {
+                equation.push({ type: 'nthroot', n: n, content: content });
+                render();
+            }
+        }
+
+        function insertSum() {
+            const lower = prompt('Enter lower limit (e.g., i=0):');
+            const upper = prompt('Enter upper limit (e.g., n):');
+            if (lower && upper) {
+                equation.push({ type: 'sum', lower: lower, upper: upper });
+                render();
+            }
+        }
+
+        function insertIntegral() {
+            const lower = prompt('Enter lower limit:');
+            const upper = prompt('Enter upper limit:');
+            if (lower && upper) {
+                equation.push({ type: 'integral', lower: lower, upper: upper });
+                render();
+            }
+        }
+
+        function insertLimit() {
+            const approach = prompt('Enter limit (e.g., x→0):');
+            if (approach) {
+                equation.push({ type: 'limit', approach: approach });
+                render();
+            }
+        }
+
+        function insertFunction(name) {
+            equation.push({ type: 'function', name: name });
+            render();
+        }
+
+        function clearAll() {
+            equation = [];
+            awaitingInput = null;
+            render();
+        }
+
+        function deleteLastElement() {
+            equation.pop();
+            render();
+        }
+
+        function copyLatex() {
+            const latex = document.getElementById('latex-output').value;
+            navigator.clipboard.writeText(latex).then(() => {
+                const msg = document.getElementById('copy-msg');
+                msg.style.opacity = '1';
+                setTimeout(() => msg.style.opacity = '0', 2000);
+            });
+        }
+
+        // Keyboard support
+        document.addEventListener('keydown', (e) => {
+            // Numbers
+            if (e.key >= '0' && e.key <= '9') {
+                insertNumber(e.key);
+                e.preventDefault();
+            }
+            // Basic operators
+            else if (e.key === '+') {
+                insertOperator('+');
+                e.preventDefault();
+            }
+            else if (e.key === '-') {
+                insertOperator('−');
+                e.preventDefault();
+            }
+            else if (e.key === '*') {
+                insertOperator('×');
+                e.preventDefault();
+            }
+            else if (e.key === '/') {
+                insertOperator('÷');
+                e.preventDefault();
+            }
+            else if (e.key === '=') {
+                insertOperator('=');
+                e.preventDefault();
+            }
+            else if (e.key === '(') {
+                insertOperator('(');
+                e.preventDefault();
+            }
+            else if (e.key === ')') {
+                insertOperator(')');
+                e.preventDefault();
+            }
+            else if (e.key === '.') {
+                insertNumber('.');
+                e.preventDefault();
+            }
+            // Variables
+            else if (e.key === 'x' || e.key === 'X') {
+                insertVariable('x');
+                e.preventDefault();
+            }
+            else if (e.key === 'y' || e.key === 'Y') {
+                insertVariable('y');
+                e.preventDefault();
+            }
+            else if (e.key === 'z' || e.key === 'Z') {
+                insertVariable('z');
+                e.preventDefault();
+            }
+            else if (e.key === 'a' || e.key === 'A') {
+                insertVariable('a');
+                e.preventDefault();
+            }
+            else if (e.key === 'b' || e.key === 'B') {
+                insertVariable('b');
+                e.preventDefault();
+            }
+            else if (e.key === 'n' || e.key === 'N') {
+                insertVariable('n');
+                e.preventDefault();
+            }
+            // Special functions with Shift/Ctrl
+            else if (e.key === 'f' || e.key === 'F') {
+                insertFraction();
+                e.preventDefault();
+            }
+            else if (e.key === '^') {
+                insertPower();
+                e.preventDefault();
+            }
+            else if (e.key === '_') {
+                insertSubscript();
+                e.preventDefault();
+            }
+            else if (e.key === 'r' || e.key === 'R') {
+                insertSqrt();
+                e.preventDefault();
+            }
+            // Delete/Backspace
+            else if (e.key === 'Backspace' || e.key === 'Delete') {
+                deleteLastElement();
+                e.preventDefault();
+            }
+            // Clear with Escape
+            else if (e.key === 'Escape') {
+                clearAll();
+                e.preventDefault();
+            }
+            // Copy with Ctrl+C
+            else if (e.ctrlKey && e.key === 'c') {
+                copyLatex();
+                e.preventDefault();
+            }
+        });
+
+        render();
+    </script>
+
+</body>
+</html>
