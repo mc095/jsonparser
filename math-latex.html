@@ -318,7 +318,10 @@
                 if (item.type === 'number' || item.type === 'variable') {
                     latex += item.value;
                 } else if (item.type === 'operator') {
-                    const opMap = {'+': '+', '−': '-', '×': '\\times', '÷': '\\div', '=': '=', '(': '(', ')': ')'};
+                    // ========================================================
+                    // MODIFICATION: Added mapping for '/'
+                    // ========================================================
+                    const opMap = {'+': '+', '−': '-', '×': '\\times', '÷': '\\div', '=': '=', '(': '(', ')': ')', '/': '/'};
                     latex += opMap[item.value] || item.value;
                 } else if (item.type === 'greek') {
                     const greekMap = {'α': '\\alpha', 'β': '\\beta', 'θ': '\\theta', 'π': '\\pi', 'Σ': '\\Sigma', 'Δ': '\\Delta'};
@@ -474,6 +477,7 @@
         }
 
         // Keyboard support
+        // Keyboard support
         document.addEventListener('keydown', (e) => {
             // Numbers
             if (e.key >= '0' && e.key <= '9') {
@@ -493,8 +497,11 @@
                 insertOperator('×');
                 e.preventDefault();
             }
+            // ========================================================
+            // MODIFICATION: Changed from '÷' to literal '/'
+            // ========================================================
             else if (e.key === '/') {
-                insertOperator('÷');
+                insertOperator('/');
                 e.preventDefault();
             }
             else if (e.key === '=') {
@@ -511,6 +518,13 @@
             }
             else if (e.key === '.') {
                 insertNumber('.');
+                e.preventDefault();
+            }
+            // ========================================================
+            // MODIFICATION: Added comma support
+            // ========================================================
+            else if (e.key === ',') {
+                insertNumber(',');
                 e.preventDefault();
             }
             // Variables - any letter (but not when using special function shortcuts)
