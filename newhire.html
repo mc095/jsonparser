@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join Us - Passionett</title>
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="We're Hiring - Passionett">
+    <meta property="og:description" content="Join us in building the future of learning and work. This is not a usual job post.">
+    <meta property="og:image" content="https://raw.githubusercontent.com/mc095/jsonparser/refs/heads/main/1745644841785.jpeg">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.passionett.com/careers">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mynerve&family=Playwrite+US+Trad:wght@100..400&display=swap" rel="stylesheet">
+    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* NEW COLOR PALETTE (from passionett.com) */
+        :root {
+            --ink: #000000;
+            --cream: #f5f5f5; /* Changed from #faf8f3 */
+            --violet: #6648fe;
+            --violet-light: #8b72ff;
+            --violet-dark: #4829d9;
+            /* Removed --accent and --sage */
+        }
+
+        body {
+            background: var(--cream);
+            font-family: 'Inter', sans-serif; /* NEW FONT */
+            color: var(--ink);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated gradient orbs in background */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.15;
+            animation: float 20s infinite ease-in-out;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .orb-1 {
+            width: 500px;
+            height: 500px;
+            background: var(--violet);
+            top: -10%;
+            right: -10%;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 400px;
+            height: 400px;
+            background: var(--violet-light); /* CHANGED from --accent */
+            bottom: 10%;
+            left: -5%;
+            animation-delay: 5s;
+        }
+
+        .orb-3 {
+            width: 350px;
+            height: 350px;
+            background: var(--violet); /* CHANGED from --sage */
+            top: 50%;
+            left: 50%;
+            animation-delay: 10s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Hero section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 2rem;
+        }
+
+        .hero-title {
+            font-family: 'Mynerve', sans-serif; /* NEW FONT */
+            font-size: clamp(2.5rem, 15vw, 10rem); /* Adjusted clamp */
+            font-weight: 800; /* Bolder */
+            line-height: 0.9;
+            letter-spacing: -0.04em;
+            position: relative;
+        }
+
+        .hero-word {
+            display: inline-block;
+            position: relative;
+        }
+
+        .hero-word-1 { color: var(--ink); transform: rotate(-2deg); }
+        .hero-word-2 { color: var(--violet); transform: rotate(1deg); margin-left: 20px; }
+        .hero-word-3 { 
+            color: var(--violet); /* CHANGED from --accent */
+            transform: rotate(-1deg); 
+            font-family: 'Syne', sans-serif; /* NEW FONT */
+            font-style: normal; /* Removed italic */
+            font-weight: 800;
+        }
+
+        .hero-subtitle {
+            position: absolute;
+            font-size: clamp(1rem, 2.5vw, 1.5rem);
+            font-weight: 400;
+            color: var(--ink);
+            opacity: 0.6;
+            transform: rotate(-3deg);
+        }
+
+        .floating-badge {
+            position: absolute;
+            background: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            font-size: 0.9rem;
+            font-weight: 500;
+            animation: float-badge 4s infinite ease-in-out;
+        }
+
+        @keyframes float-badge {
+            0%, 100% { transform: translateY(0px) rotate(-5deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        .badge-1 { top: 20%; left: 5%; background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%); }
+        .badge-2 { bottom: 30%; right: 10%; background: linear-gradient(135deg, var(--violet) 0%, var(--violet-light) 100%); color: white; animation-delay: 1s; }
+
+        /* Bento grid sections */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 1.5rem;
+            padding: 4rem 2rem;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .bento-item {
+            background: white;
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bento-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(102, 72, 254, 0.15);
+        }
+
+        .bento-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--violet), var(--violet-light)); /* CHANGED from --accent */
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .bento-item:hover::before {
+            transform: scaleX(1);
+        }
+
+        /* Grid spans */
+        .bento-large { grid-column: span 12; }
+        .bento-half { grid-column: span 12; }
+        .bento-third { grid-column: span 12; }
+        .bento-two-third { grid-column: span 12; }
+
+        /* Desktop grid overrides */
+        @media (min-width: 768px) {
+            .bento-half { grid-column: span 6; }
+            .bento-third { grid-column: span 4; }
+            .bento-two-third { grid-column: span 8; }
+        }
+
+        /* Typography styles */
+        .serif-title {
+            font-family: 'MyNerve', sans-serif; /* NEW FONT */
+            font-size: clamp(2rem, 5vw, 4rem);
+            line-height: 1.2;
+            font-weight: 800; /* Bolder */
+            margin-bottom: 1.5rem;
+        }
+
+        .sans-title {
+            font-family: 'MyNerve', sans-serif; /* NEW FONT */
+            font-size: clamp(1.5rem, 4vw, 3rem);
+            line-height: 1.2;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .body-text {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            line-height: 1.7;
+            color: rgba(10, 10, 10, 0.7);
+        }
+
+        .role-card {
+            background: linear-gradient(135deg, #ffffff 0%, #fdfdfd 100%); /* Adjusted bg */
+            border: 2px solid rgba(102, 72, 254, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .role-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, var(--violet) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .role-card:hover::after {
+            opacity: 0.1;
+        }
+
+        .role-card:hover {
+            transform: scale(1.02);
+            border-color: var(--violet);
+            box-shadow: 0 10px 40px rgba(102, 72, 254, 0.2);
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 0.5rem 1.25rem;
+            background: var(--ink);
+            color: white;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin: 0.25rem;
+        }
+
+        .tag-outline {
+            background: transparent;
+            border: 2px solid var(--ink);
+            color: var(--ink);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--violet-dark) 0%, var(--violet) 50%, var(--violet-light) 100%);
+            color: white;
+            border-radius: 32px;
+            padding: 5rem 3rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: white;
+            color: var(--violet);
+            padding: 1.5rem 4rem;
+            border-radius: 50px;
+            font-size: 1.25rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+            margin-top: 2rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .cta-section h2 { /* Targeting CTA h2 specifically */
+            font-family: 'MyNerve', sans-serif; /* NEW FONT */
+            font-weight: 800;
+        }
+
+        /* Image styles */
+        .founder-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 20px;
+            filter: grayscale(20%);
+            transition: all 0.4s ease;
+        }
+
+        .founder-image:hover {
+            filter: grayscale(0%);
+            transform: scale(1.02);
+        }
+
+        .twitter-container {
+            max-width: 550px;
+            margin: 0 auto;
+        }
+
+        /* Decorative elements */
+        .dot-pattern {
+            background-image: radial-gradient(circle, var(--ink) 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.05;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        /* Benefits list */
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .benefit-item {
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+
+        .benefit-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .benefit-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .benefit-desc {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        /* ========== NEW RESPONSIVE STYLES ========== */
+        @media (max-width: 767px) {
+            .bento-grid {
+                padding: 2rem 1rem; /* Tighter padding on mobile */
+                gap: 1rem;
+            }
+
+            .bento-item {
+                padding: 1.5rem; /* Tighter padding on mobile */
+            }
+
+            .badge-1 {
+                top: 10%;
+                left: 5%;
+                padding: 0.5rem 1rem; /* Smaller badges */
+                font-size: 0.8rem;
+            }
+
+            .badge-2 {
+                bottom: 15%;
+                right: 5%;
+                padding: 0.5rem 1rem; /* Smaller badges */
+                font-size: 0.8rem;
+            }
+
+            .hero-title {
+                font-size: clamp(2.5rem, 18vw, 10rem); /* More aggressive VW on mobile */
+            }
+
+            .serif-title {
+                font-size: clamp(1.8rem, 6vw, 4rem);
+            }
+
+            .sans-title {
+                font-size: clamp(1.5rem, 5vw, 3rem);
+            }
+
+            .body-text {
+                font-size: 1rem; /* Standardize body text */
+            }
+            
+            p.body-text {
+                font-size: 1.1rem; /* Make p tags slightly larger */
+            }
+
+            .role-card {
+                padding: 1.5rem;
+            }
+            
+            .role-card h3 {
+                font-size: 1.5rem;
+            }
+
+            .benefits-grid {
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); /* Tighter grid */
+                gap: 0.5rem;
+            }
+
+            .benefit-item {
+                padding: 1rem 0.5rem;
+            }
+
+            .cta-section {
+                padding: 3rem 1.5rem; /* Tighter padding */
+            }
+
+            .cta-section h2 {
+                font-size: clamp(2rem, 8vw, 5rem);
+            }
+
+            .cta-section p {
+                font-size: 1.1rem;
+            }
+
+            .cta-button {
+                padding: 1.25rem 2.5rem; /* Smaller button */
+                font-size: 1rem;
+            }
+
+            .twitter-container {
+                max-width: 100%; /* Allow twitter embed to shrink */
+            }
+
+            .founder-image {
+                height: 300px; /* Shorter image on mobile */
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <div class="content-wrapper">
+        <section class="hero">
+            <div class="floating-badge badge-1">Early Stage</div>
+            <div class="floating-badge badge-2">Remote First</div>
+            
+            <div style="text-align: center;">
+                <h1 class="hero-title">
+                    <div class="hero-word hero-word-1">BUILD</div>
+                    <div class="hero-word hero-word-2">THE</div>
+                    <div class="hero-word hero-word-3">Future</div>
+                </h1>
+                <p class="body-text" style="margin-top: 2rem; max-width: 600px; margin-left: auto; margin-right: auto; font-size: 1.5rem;">
+                    With Passionett<br>We're finding co-creators.
+                </p>
+            </div>
+        </section>
+
+        <div class="bento-grid">
+            
+            <div class="bento-item bento-large reveal">
+                <div class="dot-pattern"></div>
+                <h2 class="serif-title" style="color: var(--violet);">The Story So Far</h2>
+                <p class="body-text" style="font-size: 1.4rem; max-width: 900px;">
+                    Passionett is reimagining how people learn and work. We believe the future belongs to those who learn by doing, not by watching. We're building a platform where real projects replace boring courses, where skills are earned through action, not certificates.
+                </p>
+                <div style="margin-top: 2rem;">
+                    <span class="tag">Learn by Doing</span>
+                    <span class="tag">Real Projects</span>
+                    <span class="tag">Future of Work</span>
+                </div>
+            </div>
+
+            <div class="bento-item bento-half reveal">
+                <img src="https://www.passionett.com/images/founder.jpeg" alt="Rainy Jain" class="founder-image">
+                <h3 class="sans-title" style="margin-top: 2rem;">Meet Rainy</h3>
+                <p class="body-text">
+                    Our founder who's building this from scratch. No venture backing. No safety nets. Just pure vision and relentless execution.
+                </p>
+            </div>
+
+            <div class="bento-item bento-half reveal">
+                <h3 class="sans-title" style="margin-bottom: 2rem;">We're Building in Public</h3>
+                <div class="twitter-container">
+                    <blockquote class="twitter-tweet"><p lang="en" dir="ltr">Had an amazing time at <a href="https://twitter.com/_TheResidency?ref_src=twsrc%5Etfw">@_TheResidency</a> Women who build event.<br><br>It's always so great to see women thriving and building crazy brands. <br><br>Tonight was just right! <a href="https://t.co/3P0imi2zVE">pic.twitter.com/3P0imi2zVE</a></p>&mdash; Rainy Jain (@Rainy__jain) <a href="https://twitter.com/Rainy__jain/status/1976013690257498532?ref_src=twsrc%5Etfw">October 8, 2025</a></blockquote>
+                </div>
+            </div>
+
+            <div class="bento-item bento-large reveal" style="background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%); color: white;">
+                <h2 class="serif-title">The Uncomfortable Truth</h2>
+                <p class="body-text" style="color: rgba(255,255,255,0.8); font-size: 1.3rem;">
+                    This isn't Google. This isn't a cushy corporate job with free lunches and bean bags. This is ground zero of building something from nothing. It's messy. It's uncertain. It's real.
+                </p>
+                <p class="body-text" style="color: rgba(255,255,255,0.6); margin-top: 1.5rem; font-size: 1.1rem;">
+                    If you need stability, structure, or a defined career path — we respect that, but this isn't the place. If you want to create that path yourself, keep reading.
+                </p>
+            </div>
+
+            <div class="bento-item bento-large reveal">
+                <h2 class="sans-title" style="color: var(--violet); margin-bottom: 3rem;">Who We're Looking For</h2>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                    <div class="role-card">
+                        <h3 style="font-family: 'MyNerve', sans-serif; font-size: 1.8rem; font-weight: 700; margin-bottom: 1rem; color: var(--violet);">
+                            Technical Engineer
+                        </h3>
+                        <p class="body-text" style="margin-bottom: 1.5rem;">
+                            You'll build the product from scratch. Ship fast, iterate faster. Own the entire tech stack. Not looking for a coder — looking for a builder.
+                        </p>
+                    </div>
+
+                    
+                </div>
+            </div>
+
+            <div class="bento-item bento-two-third reveal">
+                <h2 class="sans-title" style="color: var(--violet);">What You Get</h2>
+                <div class="benefits-grid">
+                    <div class="benefit-item">
+                        <div class="benefit-icon">💰</div>
+                        <div class="benefit-title">Fair Stipend</div>
+                        <div class="benefit-desc">Competitive for early stage</div>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-icon">🌍</div>
+                        <div class="benefit-title">Fully Remote</div>
+                        <div class="benefit-desc">Work from anywhere</div>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-icon">💼</div>
+                        <div class="benefit-title">Real Ownership</div>
+                        <div class="benefit-desc">Build your own path</div>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-icon">⚡</div>
+                        <div class="benefit-title">Fast Growth</div>
+                        <div class="benefit-desc">Learn exponentially</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bento-item bento-third reveal" style="background-color: #f0f0f0;">
+                <h3 style="font-family: 'MyNerve', sans-serif; font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem;">
+                    No BS
+                </h3>
+                <p style="font-size: 1rem; line-height: 1.6; opacity: 0.8;">
+                    Clear communication. No corporate jargon. Real talk only.
+                </p>
+            </div>
+
+            <div class="bento-item bento-large reveal" style="padding: 0; overflow: hidden;">
+                <div class="cta-section">
+                    <h2 style="font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 700; margin-bottom: 1rem;">
+                        Ready to Take the Leap?
+                    </h2>
+                    <p style="font-size: 1.5rem; opacity: 0.9; max-width: 700px; margin: 0 auto;">
+                        If you've been waiting for the right opportunity to bet on yourself, this might be it.
+                    </p>
+                    <a href="https://forms.gle/9q7k8P8rrob7tspi6" target="_blank" class="cta-button">
+                        Apply Now →
+                    </a>
+                    <p style="margin-top: 2rem; font-size: 0.9rem; opacity: 0.7;">
+                        15-day notice period • Rolling applications
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <script>
+        // GSAP Animations
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Hero animation
+        gsap.from('.hero-word', {
+            opacity: 0,
+            y: 100,
+            rotation: 10,
+            duration: 1.2,
+            stagger: 0.2,
+            ease: 'power4.out'
+        });
+
+        // Scroll-triggered reveals
+        // This targets all .reveal elements and animates them as they enter the viewport
+        gsap.utils.toArray('.reveal').forEach((element, index) => {
+            gsap.fromTo(element, 
+                { opacity: 0, y: 30 }, // from state
+                { // to state
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.8,
+                    delay: (index % 3) * 0.1, // Stagger elements a little
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: element,
+                        start: 'top 85%', // Start animation when 85% from top
+                        toggleActions: 'play none none none'
+                    }
+                }
+            );
+        });
+
+        // Floating badges
+        gsap.to('.badge-1', {
+            y: -20,
+            duration: 3,
+            repeat: -1,
+            yoyo: true,
+            ease: 'power1.inOut'
+        });
+
+        gsap.to('.badge-2', {
+            y: -15,
+            duration: 2.5,
+            repeat: -1,
+            yoyo: true,
+            ease: 'power1.inOut',
+            delay: 0.5
+        });
+
+        // CTA button pulse
+        gsap.to('.cta-button', {
+            scale: 1.05,
+            duration: 1.5,
+            repeat: -1,
+            yoyo: true,
+            ease: 'power1.inOut'
+        });
+    </script>
+</body>
+</html>
